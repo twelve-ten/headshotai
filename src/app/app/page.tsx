@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import Link from "next/link";
 import { ArrowLeft, Upload, Loader2, Download, RefreshCw, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { analytics } from "@/lib/analytics";
 
 const styles = [
   { id: "corporate", name: "Corporate", description: "Clean, professional, Fortune 500" },
@@ -22,6 +23,11 @@ export default function HeadshotApp() {
   
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Track app view on mount
+  useEffect(() => {
+    analytics.appView();
+  }, []);
+
   const handleFile = useCallback((file: File) => {
     if (!file.type.startsWith("image/")) {
       setError("Please upload an image file");
@@ -33,6 +39,7 @@ export default function HeadshotApp() {
     }
     
     setError(null);
+    analytics.imageUpload();
     const reader = new FileReader();
     reader.onload = (e) => {
       setUploadedImage(e.target?.result as string);
@@ -53,6 +60,8 @@ export default function HeadshotApp() {
     
     setIsGenerating(true);
     setError(null);
+    analytics.generateStart();
+    analytics.styleSelect(selectedStyle);
     
     try {
       const response = await fetch("/api/generate", {
@@ -68,6 +77,7 @@ export default function HeadshotApp() {
       }
       
       setGeneratedImage(data.image);
+      analytics.generateComplete();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {
@@ -77,6 +87,7 @@ export default function HeadshotApp() {
 
   const download = () => {
     if (!generatedImage) return;
+    analytics.downloadClick();
     const link = document.createElement("a");
     link.download = "headshotai-professional.png";
     link.href = generatedImage;
