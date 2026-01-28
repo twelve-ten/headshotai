@@ -1,6 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { deductCredit, recordGeneration } from "@/lib/credits";
+import {
+  deductCredit,
+  recordGeneration,
+  refundCredit,
+  getCachedGeneration,
+  hashGeneration,
+} from "@/lib/credits";
 
 // Style prompts for different headshot types
 const stylePrompts: Record<string, string> = {
@@ -37,6 +43,7 @@ export async function POST(request: NextRequest) {
     }
 
     const { image, style } = body;
+    const styleKey = style || "corporate";
 
     // Validate required fields
     if (!image) {
@@ -59,29 +66,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { error: "Image too large. Please use an image under 10MB." },
         { status: 400 }
-      );
-    }
-
-    // Check and deduct credits BEFORE calling the API
-    const creditResult = await deductCredit(session.user.id);
-    if (!creditResult.success) {
-      return NextResponse.json(
-        {
-          error: "No credits remaining",
-          code: "NO_CREDITS",
-          remainingCredits: 0,
-        },
-        { status: 402 }
-      );
-    }
-
-    // Validate API key
-    const apiKey = process.env.GEMINI_API_KEY;
-    if (!apiKey) {
-      console.error("GEMINI_API_KEY not configured");
-      return NextResponse.json(
-        { error: "Service temporarily unavailable" },
-        { status: 503 }
       );
     }
 
@@ -110,8 +94,46 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Check for cached generation (same image + style combo)
+    const inputHash = hashGeneration(base64Data, styleKey);
+    const cachedResult = await getCachedGeneration(session.user.id, inputHash);
+
+    if (cachedResult) {
+      // Return cached result without deducting credit
+      return NextResponse.json({
+        image: cachedResult,
+        success: true,
+        cached: true,
+      });
+    }
+
+    // Check and deduct credits BEFORE calling the API
+    const creditResult = await deductCredit(session.user.id);
+    if (!creditResult.success) {
+      return NextResponse.json(
+        {
+          error: "No credits remaining",
+          code: "NO_CREDITS",
+          remainingCredits: 0,
+        },
+        { status: 402 }
+      );
+    }
+
+    // Validate API key
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) {
+      console.error("GEMINI_API_KEY not configured");
+      // Refund credit since we can't proceed
+      await refundCredit(session.user.id);
+      return NextResponse.json(
+        { error: "Service temporarily unavailable" },
+        { status: 503 }
+      );
+    }
+
     // Get the appropriate prompt
-    const prompt = stylePrompts[style] || stylePrompts.corporate;
+    const prompt = stylePrompts[styleKey] || stylePrompts.corporate;
 
     // Call Gemini API with timeout
     const controller = new AbortController();
@@ -153,7 +175,8 @@ export async function POST(request: NextRequest) {
         const errorText = await response.text();
         console.error("Gemini API error:", response.status, errorText);
 
-        // Note: Credit already deducted - in production consider refunding on API failures
+        // Refund credit on API failure
+        await refundCredit(session.user.id);
 
         // Handle specific error codes
         if (response.status === 429) {
@@ -183,6 +206,9 @@ export async function POST(request: NextRequest) {
       )?.inlineData?.data;
 
       if (!generatedImage) {
+        // No image generated - refund credit
+        await refundCredit(session.user.id);
+
         // Check if there's a text response explaining the issue
         const textResponse = data.candidates?.[0]?.content?.parts?.find(
           (part: { text?: string }) => part.text
@@ -207,16 +233,22 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      // Record successful generation
-      await recordGeneration(session.user.id, style || "corporate");
+      // Build the output image data URL
+      const outputImage = `data:image/png;base64,${generatedImage}`;
+
+      // Record successful generation with hash for caching
+      await recordGeneration(session.user.id, styleKey, inputHash, outputImage);
 
       return NextResponse.json({
-        image: `data:image/png;base64,${generatedImage}`,
+        image: outputImage,
         success: true,
         remainingCredits: creditResult.remainingCredits,
       });
     } catch (fetchError) {
       clearTimeout(timeoutId);
+
+      // Refund credit on any fetch error
+      await refundCredit(session.user.id);
 
       if (fetchError instanceof Error && fetchError.name === "AbortError") {
         return NextResponse.json(

@@ -1,5 +1,5 @@
 // Prisma schema for HeadshotAI
-// Using SQLite for development, easy to switch to PostgreSQL for production
+// Using Turso (libSQL) for edge-compatible SQLite
 
 generator client {
   provider = "prisma-client-js"
@@ -7,7 +7,7 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url      = env("DATABASE_URL")
+  url      = "file:./dev.db"
 }
 
 model User {
@@ -65,9 +65,12 @@ model Generation {
   id        String   @id @default(cuid())
   userId    String
   style     String
+  inputHash String?  // Hash of input image + style for caching
   inputUrl  String?  // Optional: store input image reference
-  outputUrl String?  // Optional: store output image reference
+  outputUrl String?  // Cached output image (base64 or URL)
   createdAt DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, inputHash])
 }
