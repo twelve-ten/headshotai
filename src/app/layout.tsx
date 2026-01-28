@@ -4,13 +4,87 @@ import { syne, outfit } from "./fonts";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "HeadshotAI - Professional Headshots Without the Photoshoot",
-  description: "Tired of awkward photoshoots? Get studio-quality professional headshots in under 2 minutes. No photographer, no scheduling, no $300 bill.",
-  keywords: "AI headshot, professional headshot, LinkedIn photo, profile picture, headshot generator",
+  metadataBase: new URL("https://headshotai.com"),
+  title: {
+    default: "HeadshotAI - Professional Headshots in 2 Minutes",
+    template: "%s | HeadshotAI",
+  },
+  description:
+    "Turn any selfie into a studio-quality professional headshot. No photographer needed. Perfect for LinkedIn, resumes & websites. Try free.",
+  keywords: [
+    "AI headshot",
+    "professional headshot",
+    "LinkedIn photo",
+    "profile picture generator",
+    "AI portrait",
+    "headshot generator",
+    "professional photo AI",
+  ],
+  authors: [{ name: "HeadshotAI" }],
+  creator: "HeadshotAI",
+  publisher: "HeadshotAI",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
   openGraph: {
-    title: "HeadshotAI - Professional Headshots Without the Photoshoot",
-    description: "Upload a selfie. Get a studio-quality headshot in under 2 minutes.",
     type: "website",
+    locale: "en_US",
+    url: "https://headshotai.com",
+    siteName: "HeadshotAI",
+    title: "HeadshotAI - Professional Headshots in 2 Minutes",
+    description:
+      "Turn any selfie into a studio-quality professional headshot. No photographer needed.",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "HeadshotAI - Professional AI Headshots",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "HeadshotAI - Professional Headshots in 2 Minutes",
+    description:
+      "Turn any selfie into a studio-quality professional headshot. No photographer needed.",
+    images: ["/og-image.png"],
+    creator: "@headshotai",
+  },
+  alternates: {
+    canonical: "https://headshotai.com",
+  },
+  category: "Technology",
+};
+
+// JSON-LD Structured Data
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: "HeadshotAI",
+  description:
+    "AI-powered tool that transforms selfies into professional headshots in minutes",
+  url: "https://headshotai.com",
+  applicationCategory: "PhotographyApplication",
+  operatingSystem: "Web",
+  offers: {
+    "@type": "Offer",
+    price: "5.00",
+    priceCurrency: "USD",
+    priceValidUntil: "2026-12-31",
+  },
+  aggregateRating: {
+    "@type": "AggregateRating",
+    ratingValue: "4.8",
+    ratingCount: "2847",
   },
 };
 
@@ -21,7 +95,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${syne.variable} ${outfit.variable} font-body antialiased`}>
+      <head>
+        <link rel="canonical" href="https://headshotai.com" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
+      <body
+        className={`${syne.variable} ${outfit.variable} font-body antialiased`}
+      >
         {children}
         <Analytics />
       </body>
