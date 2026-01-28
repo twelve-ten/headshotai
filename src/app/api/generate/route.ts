@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@/lib/auth";
+import { deductCredit, recordGeneration } from "@/lib/credits";
 
 // Style prompts for different headshot types
 const stylePrompts: Record<string, string> = {
@@ -14,6 +16,15 @@ const stylePrompts: Record<string, string> = {
 
 export async function POST(request: NextRequest) {
   try {
+    // Check authentication
+    const session = await auth();
+    if (!session?.user?.id) {
+      return NextResponse.json(
+        { error: "Authentication required", code: "UNAUTHORIZED" },
+        { status: 401 }
+      );
+    }
+
     // Parse request body
     let body;
     try {
@@ -48,6 +59,19 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { error: "Image too large. Please use an image under 10MB." },
         { status: 400 }
+      );
+    }
+
+    // Check and deduct credits BEFORE calling the API
+    const creditResult = await deductCredit(session.user.id);
+    if (!creditResult.success) {
+      return NextResponse.json(
+        {
+          error: "No credits remaining",
+          code: "NO_CREDITS",
+          remainingCredits: 0,
+        },
+        { status: 402 }
       );
     }
 
@@ -129,6 +153,8 @@ export async function POST(request: NextRequest) {
         const errorText = await response.text();
         console.error("Gemini API error:", response.status, errorText);
 
+        // Note: Credit already deducted - in production consider refunding on API failures
+
         // Handle specific error codes
         if (response.status === 429) {
           return NextResponse.json(
@@ -181,9 +207,13 @@ export async function POST(request: NextRequest) {
         );
       }
 
+      // Record successful generation
+      await recordGeneration(session.user.id, style || "corporate");
+
       return NextResponse.json({
         image: `data:image/png;base64,${generatedImage}`,
         success: true,
+        remainingCredits: creditResult.remainingCredits,
       });
     } catch (fetchError) {
       clearTimeout(timeoutId);

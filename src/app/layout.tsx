@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import { syne, outfit } from "./fonts";
+import { Providers } from "@/components/providers";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -96,7 +97,9 @@ export default function RootLayout({
       <body
         className={`${syne.variable} ${outfit.variable} font-body antialiased`}
       >
-        {children}
+        <Providers>
+          {children}
+        </Providers>
         <Analytics />
       </body>
     </html>
