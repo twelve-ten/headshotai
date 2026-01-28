@@ -1,25 +1,15 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
+import { syne, outfit } from "./fonts";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
 export const metadata: Metadata = {
-  title: "HeadshotAI - Professional AI Headshots Without the Photoshoot",
-  description: "Get studio-quality professional headshots in 60 seconds. Perfect for LinkedIn, resumes, and company websites. No photoshoot needed.",
+  title: "HeadshotAI - Professional Headshots Without the Photoshoot",
+  description: "Tired of awkward photoshoots? Get studio-quality professional headshots in under 2 minutes. No photographer, no scheduling, no $300 bill.",
   keywords: "AI headshot, professional headshot, LinkedIn photo, profile picture, headshot generator",
   openGraph: {
-    title: "HeadshotAI - Professional AI Headshots",
-    description: "Get studio-quality professional headshots in 60 seconds.",
+    title: "HeadshotAI - Professional Headshots Without the Photoshoot",
+    description: "Upload a selfie. Get a studio-quality headshot in under 2 minutes.",
     type: "website",
   },
 };
@@ -31,7 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${syne.variable} ${outfit.variable} font-body antialiased`}>
         {children}
         <Analytics />
       </body>
