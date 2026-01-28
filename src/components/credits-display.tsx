@@ -1,31 +1,26 @@
 "use client";
 
-import { Coins } from "lucide-react";
-
 interface CreditsDisplayProps {
   credits: number;
   onClick?: () => void;
 }
 
 export function CreditsDisplay({ credits, onClick }: CreditsDisplayProps) {
-  const isLow = credits <= 1;
   const isEmpty = credits === 0;
+  const isLow = credits <= 1;
 
   return (
     <button
       onClick={onClick}
-      className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border transition-all ${
+      className={`h-8 px-3 rounded-lg border text-sm font-medium transition-colors ${
         isEmpty
-          ? "border-red-200 bg-red-50 text-red-600 hover:bg-red-100"
+          ? "border-red-500/30 text-red-400 hover:bg-red-500/10"
           : isLow
-          ? "border-amber-200 bg-amber-50 text-amber-600 hover:bg-amber-100"
-          : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
+          ? "border-amber-500/30 text-amber-400 hover:bg-amber-500/10"
+          : "border-white/[0.08] text-white/60 hover:text-white hover:border-white/15"
       }`}
     >
-      <Coins className="w-4 h-4" />
-      <span className="text-sm font-medium">
-        {credits} credit{credits !== 1 ? "s" : ""}
-      </span>
+      {credits} credit{credits !== 1 ? "s" : ""}
     </button>
   );
 }

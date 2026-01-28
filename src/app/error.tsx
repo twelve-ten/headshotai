@@ -2,8 +2,6 @@
 
 import { useEffect } from "react";
 import Link from "next/link";
-import { AlertTriangle, RefreshCw, Home } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 export default function Error({
   error,
@@ -13,49 +11,32 @@ export default function Error({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("Application error:", error);
+    console.error(error);
   }, [error]);
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6">
-      <div className="max-w-md text-center">
-        <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-50 border border-red-200 mb-6">
-          <AlertTriangle className="w-8 h-8 text-red-500" />
-        </div>
-        
-        <h1 className="font-display text-2xl font-semibold mb-3 text-slate-900">
+    <div className="min-h-screen bg-[#0A0A0B] flex items-center justify-center px-6">
+      <div className="text-center max-w-md">
+        <h1 className="text-xl font-medium text-white mb-2">
           Something went wrong
         </h1>
-        
-        <p className="text-slate-500 mb-8">
-          We encountered an unexpected error. This has been logged and we&apos;ll look into it.
+        <p className="text-white/40 text-sm mb-8">
+          We encountered an unexpected error. Please try again.
         </p>
-        
-        <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <Button
+        <div className="flex items-center justify-center gap-4">
+          <button
             onClick={reset}
-            className="bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg px-6"
+            className="h-10 px-6 rounded-lg bg-white text-black font-medium hover:bg-white/90 transition-colors text-sm"
           >
-            <RefreshCw className="w-4 h-4 mr-2" />
-            Try Again
-          </Button>
-          
-          <Link href="/">
-            <Button
-              variant="outline"
-              className="border-slate-200 bg-white hover:bg-slate-50 rounded-lg px-6 w-full"
-            >
-              <Home className="w-4 h-4 mr-2" />
-              Go Home
-            </Button>
+            Try again
+          </button>
+          <Link
+            href="/"
+            className="h-10 px-6 rounded-lg border border-white/[0.08] text-white/60 hover:text-white hover:border-white/15 transition-colors flex items-center text-sm"
+          >
+            Go home
           </Link>
         </div>
-        
-        {error.digest && (
-          <p className="text-slate-400 text-xs mt-6">
-            Error ID: {error.digest}
-          </p>
-        )}
       </div>
     </div>
   );

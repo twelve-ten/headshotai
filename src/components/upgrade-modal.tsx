@@ -1,6 +1,6 @@
 "use client";
 
-import { X, Check, Zap, Crown, Sparkles } from "lucide-react";
+import { X, Check } from "lucide-react";
 
 interface UpgradeModalProps {
   isOpen: boolean;
@@ -13,29 +13,18 @@ const plans = [
     name: "Starter",
     price: 5,
     credits: 5,
-    perCredit: 1,
-    icon: Zap,
-    popular: false,
-    features: [
-      "5 headshot generations",
-      "All 4 styles",
-      "High-resolution downloads",
-      "Commercial usage rights",
-    ],
+    features: ["5 headshots", "All styles", "High-res downloads"],
   },
   {
     id: "pro",
-    name: "Pro Pack",
+    name: "Pro",
     price: 15,
     credits: 20,
-    perCredit: 0.75,
-    icon: Sparkles,
     popular: true,
     features: [
-      "20 headshot generations",
-      "All 4 styles",
-      "High-resolution downloads",
-      "Commercial usage rights",
+      "20 headshots",
+      "All styles",
+      "High-res downloads",
       "Priority processing",
     ],
   },
@@ -44,16 +33,12 @@ const plans = [
     name: "Business",
     price: 49,
     credits: 100,
-    perCredit: 0.49,
-    icon: Crown,
-    popular: false,
     features: [
-      "100 headshot generations",
-      "All 4 styles",
-      "High-resolution downloads",
-      "Commercial usage rights",
+      "100 headshots",
+      "All styles",
+      "High-res downloads",
       "Priority processing",
-      "Bulk upload support",
+      "Bulk upload",
     ],
   },
 ];
@@ -62,7 +47,6 @@ export function UpgradeModal({ isOpen, onClose }: UpgradeModalProps) {
   if (!isOpen) return null;
 
   const handlePurchase = (planId: string) => {
-    // TODO: Integrate Stripe checkout
     console.log("Purchase plan:", planId);
     alert(`Stripe integration coming soon!\n\nYou selected the ${planId} plan.`);
   };
@@ -71,156 +55,84 @@ export function UpgradeModal({ isOpen, onClose }: UpgradeModalProps) {
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/80 backdrop-blur-sm"
         onClick={onClose}
       />
 
       {/* Modal */}
-      <div className="relative w-full max-w-3xl bg-white border border-slate-200 rounded-2xl overflow-hidden max-h-[90vh] overflow-y-auto shadow-xl">
+      <div className="relative w-full max-w-3xl bg-[#0A0A0B] border border-white/[0.08] rounded-xl overflow-hidden">
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 p-2 rounded-lg hover:bg-slate-100 transition-colors z-10"
+          className="absolute top-4 right-4 p-2 rounded-lg hover:bg-white/[0.05] transition-colors z-10"
         >
-          <X className="w-5 h-5 text-slate-400" />
+          <X className="w-5 h-5 text-white/40" />
         </button>
 
         {/* Header */}
-        <div className="p-8 text-center border-b border-slate-100">
-          <h2 className="text-xl font-semibold text-slate-900 mb-2">
-            Get More Credits
-          </h2>
-          <p className="text-slate-500 text-sm">
-            Choose a plan to continue creating professional headshots.
+        <div className="p-8 pb-0">
+          <h2 className="text-xl font-medium text-white mb-2">Get more credits</h2>
+          <p className="text-white/40 text-sm">
+            Choose a plan to continue creating headshots
           </p>
         </div>
 
         {/* Plans */}
         <div className="p-8">
           <div className="grid md:grid-cols-3 gap-4">
-            {plans.map((plan) => {
-              const Icon = plan.icon;
-              return (
-                <div
-                  key={plan.id}
-                  className={`relative rounded-xl border p-5 transition-all ${
+            {plans.map((plan) => (
+              <div
+                key={plan.id}
+                className={`relative rounded-xl border p-5 ${
+                  plan.popular
+                    ? "border-white/20 bg-white/[0.03]"
+                    : "border-white/[0.06]"
+                }`}
+              >
+                {plan.popular && (
+                  <div className="absolute -top-2.5 left-4 px-2 py-0.5 rounded-full bg-white text-black text-xs font-medium">
+                    Popular
+                  </div>
+                )}
+
+                <div className="mb-4">
+                  <h3 className="font-medium text-white">{plan.name}</h3>
+                  <p className="text-xs text-white/40 mt-0.5">
+                    {plan.credits} credits
+                  </p>
+                </div>
+
+                <div className="mb-5">
+                  <span className="text-2xl font-medium text-white">
+                    ${plan.price}
+                  </span>
+                  <span className="text-white/30 text-sm ml-1">one-time</span>
+                </div>
+
+                <ul className="space-y-2 mb-5">
+                  {plan.features.map((feature, i) => (
+                    <li
+                      key={i}
+                      className="flex items-center gap-2 text-sm text-white/50"
+                    >
+                      <Check className="w-3.5 h-3.5 text-white/30" />
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+
+                <button
+                  onClick={() => handlePurchase(plan.id)}
+                  className={`w-full h-9 rounded-lg text-sm font-medium transition-colors ${
                     plan.popular
-                      ? "border-blue-500 bg-blue-50/50"
-                      : "border-slate-200 bg-white hover:border-slate-300"
+                      ? "bg-white text-black hover:bg-white/90"
+                      : "bg-white/[0.06] text-white hover:bg-white/[0.1]"
                   }`}
                 >
-                  {plan.popular && (
-                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-blue-500 text-white text-xs font-medium">
-                      Popular
-                    </div>
-                  )}
-
-                  <div className="flex items-center gap-3 mb-4">
-                    <div
-                      className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                        plan.popular ? "bg-blue-500" : "bg-slate-100"
-                      }`}
-                    >
-                      <Icon
-                        className={`w-5 h-5 ${
-                          plan.popular ? "text-white" : "text-slate-600"
-                        }`}
-                      />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-slate-900">{plan.name}</h3>
-                      <p className="text-slate-500 text-sm">
-                        {plan.credits} credits
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="mb-5">
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-2xl font-semibold text-slate-900">
-                        ${plan.price}
-                      </span>
-                      <span className="text-slate-400 text-sm">one-time</span>
-                    </div>
-                    <p className="text-slate-400 text-xs mt-1">
-                      ${plan.perCredit.toFixed(2)} per headshot
-                    </p>
-                  </div>
-
-                  <ul className="space-y-2 mb-5">
-                    {plan.features.map((feature, i) => (
-                      <li key={i} className="flex items-center gap-2 text-sm">
-                        <Check className="w-4 h-4 text-blue-500 flex-shrink-0" />
-                        <span className="text-slate-600">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  <button
-                    onClick={() => handlePurchase(plan.id)}
-                    className={`w-full h-10 rounded-lg font-medium transition-all text-sm ${
-                      plan.popular
-                        ? "bg-blue-500 hover:bg-blue-600 text-white"
-                        : "bg-slate-100 hover:bg-slate-200 text-slate-700"
-                    }`}
-                  >
-                    Buy Now
-                  </button>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Trust badges */}
-          <div className="mt-8 flex items-center justify-center gap-6 text-slate-400 text-sm">
-            <span className="flex items-center gap-2">
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-                />
-              </svg>
-              Secure Payment
-            </span>
-            <span className="flex items-center gap-2">
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-              Instant Delivery
-            </span>
-            <span className="flex items-center gap-2">
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
-                />
-              </svg>
-              Powered by Stripe
-            </span>
+                  Buy now
+                </button>
+              </div>
+            ))}
           </div>
         </div>
       </div>
