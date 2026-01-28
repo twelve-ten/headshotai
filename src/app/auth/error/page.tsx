@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { AlertCircle, Sparkles } from "lucide-react";
+import { AlertCircle } from "lucide-react";
 
 export default function AuthErrorPage() {
   const searchParams = useSearchParams();
@@ -27,41 +27,40 @@ export default function AuthErrorPage() {
   const message = error ? errorMessages[error] || errorMessages.Default : errorMessages.Default;
 
   return (
-    <div className="min-h-screen bg-[#08080a] flex items-center justify-center px-4">
-      <div className="w-full max-w-md text-center">
+    <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
+      <div className="w-full max-w-sm text-center">
         {/* Logo */}
-        <Link href="/" className="inline-flex items-center gap-2 mb-8">
-          <Sparkles className="w-8 h-8 text-orange-500" />
-          <span className="text-2xl font-bold text-white">
-            Headshot<span className="text-orange-400">AI</span>
+        <Link href="/" className="inline-block mb-8">
+          <span className="text-2xl font-semibold text-slate-900">
+            HeadshotAI
           </span>
         </Link>
 
         {/* Error card */}
-        <div className="bg-white/[0.03] border border-white/10 rounded-2xl p-8">
-          <div className="w-16 h-16 rounded-full bg-red-500/10 flex items-center justify-center mx-auto mb-6">
-            <AlertCircle className="w-8 h-8 text-red-400" />
+        <div className="bg-white border border-slate-200 rounded-xl p-8 shadow-sm">
+          <div className="w-14 h-14 rounded-full bg-red-50 flex items-center justify-center mx-auto mb-6">
+            <AlertCircle className="w-7 h-7 text-red-500" />
           </div>
           
-          <h1 className="text-xl font-semibold text-white mb-2">
+          <h1 className="text-lg font-semibold text-slate-900 mb-2">
             Authentication Error
           </h1>
           
-          <p className="text-white/60 mb-6">
+          <p className="text-slate-500 text-sm mb-6">
             {message}
           </p>
 
           <div className="space-y-3">
             <Link
               href="/auth/signin"
-              className="block w-full h-12 rounded-xl bg-orange-500 hover:bg-orange-400 text-black font-semibold flex items-center justify-center transition-all"
+              className="block w-full h-11 rounded-lg bg-blue-500 hover:bg-blue-600 text-white font-medium flex items-center justify-center transition-all"
             >
               Try Again
             </Link>
             
             <Link
               href="/"
-              className="block w-full h-12 rounded-xl border border-white/20 bg-white/5 text-white hover:bg-white/10 font-medium flex items-center justify-center transition-all"
+              className="block w-full h-11 rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 font-medium flex items-center justify-center transition-all"
             >
               Go Home
             </Link>

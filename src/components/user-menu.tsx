@@ -37,23 +37,23 @@ export function UserMenu({ user }: UserMenuProps) {
           <img
             src={user.image}
             alt={user.name || "User"}
-            className="w-8 h-8 rounded-full border border-white/20"
+            className="w-8 h-8 rounded-full border border-slate-200"
           />
         ) : (
-          <div className="w-8 h-8 rounded-full bg-orange-500/20 border border-orange-500/50 flex items-center justify-center">
-            <User className="w-4 h-4 text-orange-400" />
+          <div className="w-8 h-8 rounded-full bg-blue-50 border border-blue-200 flex items-center justify-center">
+            <User className="w-4 h-4 text-blue-500" />
           </div>
         )}
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-56 rounded-xl bg-[#0a0a0c] border border-white/10 shadow-xl overflow-hidden z-50">
+        <div className="absolute right-0 mt-2 w-56 rounded-xl bg-white border border-slate-200 shadow-lg overflow-hidden z-50">
           {/* User info */}
-          <div className="p-4 border-b border-white/10">
-            <p className="font-medium text-white truncate">
+          <div className="p-4 border-b border-slate-100">
+            <p className="font-medium text-slate-900 truncate">
               {user.name || "User"}
             </p>
-            <p className="text-sm text-white/50 truncate">{user.email}</p>
+            <p className="text-sm text-slate-500 truncate">{user.email}</p>
           </div>
 
           {/* Menu items */}
@@ -63,7 +63,7 @@ export function UserMenu({ user }: UserMenuProps) {
                 setIsOpen(false);
                 // TODO: Open billing/upgrade modal
               }}
-              className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 text-white/70 hover:text-white transition-colors"
+              className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-50 text-slate-600 hover:text-slate-900 transition-colors"
             >
               <CreditCard className="w-4 h-4" />
               <span className="text-sm">Buy Credits</span>
@@ -74,7 +74,7 @@ export function UserMenu({ user }: UserMenuProps) {
                 setIsOpen(false);
                 // TODO: Navigate to settings
               }}
-              className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 text-white/70 hover:text-white transition-colors"
+              className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-50 text-slate-600 hover:text-slate-900 transition-colors"
             >
               <Settings className="w-4 h-4" />
               <span className="text-sm">Settings</span>
@@ -82,10 +82,10 @@ export function UserMenu({ user }: UserMenuProps) {
           </div>
 
           {/* Sign out */}
-          <div className="p-2 border-t border-white/10">
+          <div className="p-2 border-t border-slate-100">
             <button
               onClick={() => signOut({ callbackUrl: "/" })}
-              className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-red-500/10 text-white/70 hover:text-red-400 transition-colors"
+              className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-red-50 text-slate-600 hover:text-red-600 transition-colors"
             >
               <LogOut className="w-4 h-4" />
               <span className="text-sm">Sign Out</span>

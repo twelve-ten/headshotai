@@ -4,7 +4,7 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { Loader2, Mail, Lock, Sparkles } from "lucide-react";
+import { Loader2 } from "lucide-react";
 
 export default function SignInPage() {
   const [email, setEmail] = useState("");
@@ -12,7 +12,7 @@ export default function SignInPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [error, setError] = useState("");
-  
+
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/app";
   const authError = searchParams.get("error");
@@ -48,41 +48,39 @@ export default function SignInPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#08080a] flex items-center justify-center px-4">
-      <div className="w-full max-w-md">
-        {/* Logo */}
+    <div className="min-h-screen bg-[#0A0A0B] flex items-center justify-center px-6">
+      <div className="w-full max-w-sm">
+        {/* Header */}
         <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center gap-2">
-            <Sparkles className="w-8 h-8 text-orange-500" />
-            <span className="text-2xl font-bold text-white">
-              Headshot<span className="text-orange-400">AI</span>
-            </span>
+          <Link href="/" className="text-xl font-medium text-white">
+            HeadshotAI
           </Link>
-          <p className="text-white/60 mt-2">Sign in to continue</p>
+          <p className="text-white/40 mt-2 text-sm">Sign in to continue</p>
         </div>
 
-        {/* Error messages */}
+        {/* Error */}
         {(error || authError) && (
-          <div className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-sm text-center">
-            {error || (authError === "OAuthAccountNotLinked" 
-              ? "Email already used with different sign-in method" 
-              : "Authentication failed")}
+          <div className="mb-6 p-4 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm text-center">
+            {error ||
+              (authError === "OAuthAccountNotLinked"
+                ? "Email already used with a different sign-in method"
+                : "Authentication failed")}
           </div>
         )}
 
-        {/* Sign in card */}
-        <div className="bg-white/[0.03] border border-white/10 rounded-2xl p-6 space-y-6">
-          {/* Google sign in */}
+        {/* Form */}
+        <div className="space-y-6">
+          {/* Google */}
           <button
             onClick={handleGoogleSignIn}
             disabled={isGoogleLoading}
-            className="w-full h-12 rounded-xl bg-white hover:bg-gray-100 text-black font-medium flex items-center justify-center gap-3 transition-all disabled:opacity-50"
+            className="w-full h-11 rounded-lg border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.05] text-white font-medium flex items-center justify-center gap-3 transition-colors disabled:opacity-50"
           >
             {isGoogleLoading ? (
-              <Loader2 className="w-5 h-5 animate-spin" />
+              <Loader2 className="w-4 h-4 animate-spin" />
             ) : (
               <>
-                <svg className="w-5 h-5" viewBox="0 0 24 24">
+                <svg className="w-4 h-4" viewBox="0 0 24 24">
                   <path
                     fill="currentColor"
                     d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -108,73 +106,71 @@ export default function SignInPage() {
           {/* Divider */}
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-white/10"></div>
+              <div className="w-full border-t border-white/[0.06]" />
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-[#08080a] text-white/40">or</span>
+              <span className="px-4 bg-[#0A0A0B] text-white/30">or</span>
             </div>
           </div>
 
-          {/* Email/password form */}
+          {/* Email form */}
           <form onSubmit={handleCredentialsSignIn} className="space-y-4">
             <div>
-              <label className="block text-sm text-white/60 mb-2">Email</label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" />
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="you@example.com"
-                  className="w-full h-12 pl-11 pr-4 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-white/30 focus:outline-none focus:border-orange-500/50 transition-colors"
-                  required
-                />
-              </div>
+              <label className="block text-sm text-white/40 mb-2">Email</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                className="w-full h-11 px-4 rounded-lg bg-white/[0.03] border border-white/[0.08] text-white placeholder:text-white/20 focus:outline-none focus:border-white/20 transition-colors"
+                required
+              />
             </div>
 
             <div>
-              <label className="block text-sm text-white/60 mb-2">Password</label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" />
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="w-full h-12 pl-11 pr-4 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-white/30 focus:outline-none focus:border-orange-500/50 transition-colors"
-                  required
-                />
-              </div>
+              <label className="block text-sm text-white/40 mb-2">
+                Password
+              </label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                className="w-full h-11 px-4 rounded-lg bg-white/[0.03] border border-white/[0.08] text-white placeholder:text-white/20 focus:outline-none focus:border-white/20 transition-colors"
+                required
+              />
             </div>
 
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full h-12 rounded-xl bg-orange-500 hover:bg-orange-400 disabled:bg-orange-500/50 text-black font-semibold flex items-center justify-center gap-2 transition-all"
+              className="w-full h-11 rounded-lg bg-white text-black font-medium flex items-center justify-center gap-2 hover:bg-white/90 transition-colors disabled:opacity-50"
             >
               {isLoading ? (
-                <Loader2 className="w-5 h-5 animate-spin" />
+                <Loader2 className="w-4 h-4 animate-spin" />
               ) : (
-                "Sign In"
+                "Sign in"
               )}
             </button>
           </form>
         </div>
 
-        {/* Sign up link */}
-        <p className="text-center text-white/60 mt-6">
+        {/* Footer links */}
+        <p className="text-center text-white/40 mt-8 text-sm">
           Don&apos;t have an account?{" "}
           <Link
             href={`/auth/signup?callbackUrl=${encodeURIComponent(callbackUrl)}`}
-            className="text-orange-400 hover:text-orange-300 font-medium"
+            className="text-white hover:text-white/80 transition-colors"
           >
-            Sign up free
+            Sign up
           </Link>
         </p>
 
-        {/* Back to home */}
         <p className="text-center mt-4">
-          <Link href="/" className="text-white/40 hover:text-white/60 text-sm">
+          <Link
+            href="/"
+            className="text-white/30 hover:text-white/50 text-sm transition-colors"
+          >
             ← Back to home
           </Link>
         </p>

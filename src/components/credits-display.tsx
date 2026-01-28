@@ -16,10 +16,10 @@ export function CreditsDisplay({ credits, onClick }: CreditsDisplayProps) {
       onClick={onClick}
       className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border transition-all ${
         isEmpty
-          ? "border-red-500/50 bg-red-500/10 text-red-400 hover:bg-red-500/20"
+          ? "border-red-200 bg-red-50 text-red-600 hover:bg-red-100"
           : isLow
-          ? "border-orange-500/50 bg-orange-500/10 text-orange-400 hover:bg-orange-500/20"
-          : "border-white/10 bg-white/5 text-white/80 hover:bg-white/10"
+          ? "border-amber-200 bg-amber-50 text-amber-600 hover:bg-amber-100"
+          : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
       }`}
     >
       <Coins className="w-4 h-4" />

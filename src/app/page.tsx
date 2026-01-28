@@ -1,27 +1,25 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Check, Clock, Shield, Sparkles, Star, ChevronDown } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ArrowRight, ChevronDown } from "lucide-react";
 import { useState } from "react";
 
-// FAQ data with real objection handling
 const faqs = [
   {
-    q: "Will this actually look professional?",
-    a: "Yes. Our AI is trained on thousands of professional studio headshots. The output matches what you'd get from a $300 photoshoot - clean background, perfect lighting, flattering angles.",
+    q: "How does it work?",
+    a: "Upload any selfie, choose a style, and our AI transforms it into a professional headshot. The entire process takes under 2 minutes.",
   },
   {
-    q: "What if I don't like the result?",
-    a: "Generate as many variations as you want until you're happy. Most people find their perfect headshot within 2-3 tries.",
+    q: "Will it look natural?",
+    a: "Yes. Our AI preserves your likeness while enhancing lighting, composition, and background. The result looks like you stepped out of a professional studio.",
   },
   {
-    q: "Is my photo stored or used for training?",
-    a: "No. Your photo is processed and immediately deleted. We never store, share, or train on your images. Privacy is non-negotiable.",
+    q: "What about privacy?",
+    a: "Your photos are processed and immediately deleted. We never store, share, or train on your images.",
   },
   {
-    q: "Can I use this for LinkedIn and job applications?",
-    a: "Absolutely. These are real photos of you, professionally enhanced. They're yours to use anywhere - LinkedIn, resumes, company websites, business cards.",
+    q: "Can I use it for LinkedIn?",
+    a: "Absolutely. These are real photos of you, professionally enhanced. Use them anywhere — LinkedIn, resumes, company websites.",
   },
 ];
 
@@ -29,351 +27,208 @@ export default function Home() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   return (
-    <div className="min-h-screen bg-[#08080a] text-white overflow-hidden">
-      {/* Skip to main content link for accessibility */}
-      <a
-        href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-orange-500 focus:text-black focus:rounded-lg focus:font-semibold"
-      >
-        Skip to main content
-      </a>
-
-      {/* Grain overlay for texture */}
-      <div 
-        className="fixed inset-0 opacity-[0.015] pointer-events-none z-50"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
-        }}
-        aria-hidden="true"
-      />
-      
-      {/* Animated gradient orbs - decorative */}
-      <div 
-        className="fixed top-1/4 -right-1/4 w-[800px] h-[800px] bg-gradient-to-br from-orange-500/20 via-red-500/10 to-transparent rounded-full blur-3xl animate-pulse" 
-        aria-hidden="true"
-      />
-      <div 
-        className="fixed bottom-1/4 -left-1/4 w-[600px] h-[600px] bg-gradient-to-tr from-amber-500/10 via-orange-500/5 to-transparent rounded-full blur-3xl" 
-        aria-hidden="true"
-      />
-
-      {/* Nav */}
-      <nav className="fixed top-0 left-0 right-0 z-40 border-b border-white/5 bg-[#08080a]/80 backdrop-blur-xl" aria-label="Main navigation">
-        <div className="mx-auto max-w-6xl px-6 py-4 flex items-center justify-between">
-          <Link href="/" className="font-display text-xl font-bold tracking-tight" aria-label="HeadshotAI Home">
-            Headshot<span className="text-orange-400">AI</span>
+    <div className="min-h-screen bg-[#0A0A0B] text-white">
+      {/* Navigation */}
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/[0.06] bg-[#0A0A0B]/80 backdrop-blur-xl">
+        <div className="mx-auto max-w-6xl px-6 h-16 flex items-center justify-between">
+          <Link href="/" className="text-lg font-medium tracking-tight">
+            HeadshotAI
           </Link>
-          <div className="flex items-center gap-6">
-            <Link href="#pricing" className="text-sm text-white/50 hover:text-white transition-colors">
+          <div className="flex items-center gap-8">
+            <Link
+              href="#pricing"
+              className="text-sm text-white/50 hover:text-white transition-colors"
+            >
               Pricing
             </Link>
-            <Link href="#faq" className="text-sm text-white/50 hover:text-white transition-colors">
-              FAQ
-            </Link>
             <Link href="/app">
-              <Button size="sm" className="bg-orange-500 hover:bg-orange-400 text-black font-semibold rounded-full px-5">
-                Create Headshot
-              </Button>
+              <button className="h-9 px-4 text-sm font-medium bg-white text-black rounded-lg hover:bg-white/90 transition-colors">
+                Get Started
+              </button>
             </Link>
           </div>
         </div>
       </nav>
 
-      <main id="main-content">
-        {/* Hero - Rhetorical question headline */}
-        <section className="relative z-10 pt-32 pb-24 px-6" aria-labelledby="hero-heading">
-          <div className="mx-auto max-w-4xl text-center">
-            {/* Social proof badge */}
-            <div className="inline-flex items-center gap-2 rounded-full border border-orange-500/20 bg-orange-500/5 px-4 py-2 text-sm mb-8 animate-fade-in">
-              <div className="flex -space-x-2" aria-hidden="true">
-                {[...Array(4)].map((_, i) => (
-                  <div key={i} className="w-6 h-6 rounded-full bg-gradient-to-br from-orange-400 to-red-500 border-2 border-[#08080a]" />
-                ))}
-              </div>
-              <span className="text-white/70">12,847 headshots created this week</span>
-            </div>
-            
-            {/* Headline - Rhetorical question format */}
-            <h1 id="hero-heading" className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.05] mb-6">
-              <span className="text-white/40">Tired of</span> awkward photoshoots
+      <main>
+        {/* Hero */}
+        <section className="pt-40 pb-32 px-6">
+          <div className="mx-auto max-w-2xl text-center">
+            <h1 className="text-4xl sm:text-5xl font-medium tracking-tight leading-[1.15] mb-6">
+              Professional headshots,
               <br />
-              <span className="text-white/40">and</span>{" "}
-              <span className="bg-gradient-to-r from-orange-400 via-amber-300 to-orange-500 bg-clip-text text-transparent">
-                bad LinkedIn photos?
-              </span>
+              <span className="text-white/40">without the photoshoot</span>
             </h1>
-            
-            {/* Subheadline - Specific benefit */}
-            <p className="text-xl sm:text-2xl text-white/50 max-w-2xl mx-auto mb-10 leading-relaxed font-light">
-              Upload a selfie. Get a{" "}
-              <span className="text-white font-medium">studio-quality headshot</span>{" "}
-              in under 2 minutes. No photographer, no scheduling, no $300 bill.
+
+            <p className="text-lg text-white/50 mb-10 max-w-md mx-auto leading-relaxed">
+              Upload a selfie. Get a studio-quality headshot in under 2 minutes.
             </p>
-            
-            {/* CTA - Action verb + what they get */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
-              <Link href="/app">
-                <Button size="lg" className="bg-orange-500 hover:bg-orange-400 text-black font-bold text-lg px-8 h-14 rounded-full gap-2 shadow-[0_0_30px_rgba(251,146,60,0.3)] hover:shadow-[0_0_40px_rgba(251,146,60,0.4)] transition-all">
-                  Create Your Headshot Now
-                  <ArrowRight className="w-5 h-5" aria-hidden="true" />
-                </Button>
-              </Link>
-            </div>
-            
-            {/* Risk reversal */}
-            <ul className="flex flex-wrap items-center justify-center gap-6 text-sm text-white/40" aria-label="Key benefits">
-              <li className="flex items-center gap-1.5">
-                <Check className="w-4 h-4 text-emerald-400" aria-hidden="true" />
-                First one free
-              </li>
-              <li className="flex items-center gap-1.5">
-                <Clock className="w-4 h-4 text-orange-400" aria-hidden="true" />
-                Ready in 2 minutes
-              </li>
-              <li className="flex items-center gap-1.5">
-                <Shield className="w-4 h-4 text-blue-400" aria-hidden="true" />
-                Photos never stored
-              </li>
-            </ul>
+
+            <Link href="/app">
+              <button className="h-12 px-8 text-base font-medium bg-white text-black rounded-lg hover:bg-white/90 transition-colors inline-flex items-center gap-2">
+                Create your headshot
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </Link>
+
+            <p className="mt-8 text-sm text-white/30">
+              First one free · No account required
+            </p>
           </div>
         </section>
 
-        {/* Problem / Pain Section */}
-        <section className="relative z-10 py-20 px-6 border-t border-white/5" aria-labelledby="problem-heading">
-          <div className="mx-auto max-w-5xl">
-            <div className="text-center mb-16">
-              <h2 id="problem-heading" className="font-display text-3xl sm:text-4xl font-bold mb-4">
-                The old way is <span className="text-red-400">broken</span>
-              </h2>
-            </div>
-            
-            <ul className="grid md:grid-cols-3 gap-8" role="list">
-              {[
-                { pain: "Professional photoshoots cost $200-500", icon: "💸", label: "High cost" },
-                { pain: "Scheduling takes weeks of back-and-forth", icon: "📅", label: "Time consuming" },
-                { pain: "Results depend on how you felt that day", icon: "😬", label: "Inconsistent quality" },
-              ].map((item, i) => (
-                <li 
-                  key={i} 
-                  className="text-center p-6 rounded-2xl border border-red-500/10 bg-red-500/5"
-                >
-                  <div className="text-4xl mb-4" role="img" aria-label={item.label}>{item.icon}</div>
-                  <p className="text-white/70">{item.pain}</p>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
+        {/* How it works */}
+        <section className="py-32 px-6 border-t border-white/[0.06]">
+          <div className="mx-auto max-w-4xl">
+            <h2 className="text-2xl font-medium text-center mb-20">
+              How it works
+            </h2>
 
-        {/* Solution / How It Works */}
-        <section className="relative z-10 py-20 px-6" aria-labelledby="how-it-works-heading">
-          <div className="mx-auto max-w-5xl">
-            <div className="text-center mb-16">
-              <h2 id="how-it-works-heading" className="font-display text-3xl sm:text-4xl font-bold mb-4">
-                How HeadshotAI works
-              </h2>
-              <p className="text-white/50">Three steps. Two minutes. One perfect headshot.</p>
-            </div>
-            
-            <ol className="grid md:grid-cols-3 gap-8" role="list">
-              {[
-                { 
-                  step: "1", 
-                  title: "Upload any selfie", 
-                  desc: "Phone photo, webcam shot, whatever you have. Our AI handles the rest.",
-                  icon: "📸"
-                },
-                { 
-                  step: "2", 
-                  title: "Pick your style", 
-                  desc: "Corporate, creative, LinkedIn-optimized, or executive. Choose your vibe.",
-                  icon: "🎨"
-                },
-                { 
-                  step: "3", 
-                  title: "Download & use", 
-                  desc: "High-res PNG ready for LinkedIn, resumes, websites, business cards.",
-                  icon: "✨"
-                },
-              ].map((item, i) => (
-                <li key={i} className="relative">
-                  <div className="text-6xl font-display font-bold text-orange-500/10 absolute -top-4 -left-2" aria-hidden="true">
-                    {item.step}
-                  </div>
-                  <article className="relative p-6 rounded-2xl border border-white/5 bg-white/[0.02]">
-                    <div className="text-3xl mb-4" role="img" aria-hidden="true">{item.icon}</div>
-                    <h3 className="font-display text-xl font-semibold mb-2">{item.title}</h3>
-                    <p className="text-white/50 text-sm">{item.desc}</p>
-                  </article>
-                </li>
-              ))}
-            </ol>
-          </div>
-        </section>
-
-        {/* Social Proof */}
-        <section className="relative z-10 py-20 px-6 bg-white/[0.01]" aria-labelledby="testimonials-heading">
-          <div className="mx-auto max-w-5xl">
-            <div className="text-center mb-12">
-              <h2 id="testimonials-heading" className="font-display text-3xl font-bold mb-2">
-                What people are saying
-              </h2>
-            </div>
-            
-            <div className="grid md:grid-cols-3 gap-6" role="list">
+            <div className="grid md:grid-cols-3 gap-16">
               {[
                 {
-                  quote: "Got more LinkedIn messages in one week than I did all last year. This headshot actually gets responses.",
-                  author: "Sarah K.",
-                  role: "Software Engineer @ Stripe",
-                  rating: 5,
+                  step: "01",
+                  title: "Upload",
+                  desc: "Any selfie or casual photo. Phone quality is fine.",
                 },
                 {
-                  quote: "Saved $400 on a photographer. Used this for my entire team of 12. Everyone looks incredible.",
-                  author: "Marcus R.",
-                  role: "Founder, TechCo",
-                  rating: 5,
+                  step: "02",
+                  title: "Choose style",
+                  desc: "Corporate, creative, LinkedIn-optimized. Pick your look.",
                 },
                 {
-                  quote: "I was skeptical but holy shit. My new headshot looks better than my actual professional photos.",
-                  author: "Jennifer L.",
-                  role: "Product Manager",
-                  rating: 5,
+                  step: "03",
+                  title: "Download",
+                  desc: "High-res PNG ready for professional use.",
                 },
-              ].map((testimonial, i) => (
-                <article key={i} className="p-6 rounded-2xl border border-white/5 bg-white/[0.02]">
-                  <div className="flex gap-1 mb-4" aria-label={`${testimonial.rating} out of 5 stars`}>
-                    {[...Array(testimonial.rating)].map((_, j) => (
-                      <Star key={j} className="w-4 h-4 fill-orange-400 text-orange-400" aria-hidden="true" />
-                    ))}
-                  </div>
-                  <blockquote className="text-white/80 mb-4 text-sm leading-relaxed">&ldquo;{testimonial.quote}&rdquo;</blockquote>
-                  <footer>
-                    <cite className="not-italic">
-                      <div className="font-semibold text-sm">{testimonial.author}</div>
-                      <div className="text-xs text-white/40">{testimonial.role}</div>
-                    </cite>
-                  </footer>
-                </article>
+              ].map((item) => (
+                <div key={item.step}>
+                  <div className="text-sm text-white/20 mb-4">{item.step}</div>
+                  <h3 className="text-lg font-medium mb-2">{item.title}</h3>
+                  <p className="text-white/50 text-sm leading-relaxed">
+                    {item.desc}
+                  </p>
+                </div>
               ))}
             </div>
           </div>
         </section>
 
         {/* Pricing */}
-        <section id="pricing" className="relative z-10 py-20 px-6" aria-labelledby="pricing-heading">
+        <section
+          id="pricing"
+          className="py-32 px-6 border-t border-white/[0.06]"
+        >
           <div className="mx-auto max-w-4xl">
-            <div className="text-center mb-12">
-              <h2 id="pricing-heading" className="font-display text-3xl sm:text-4xl font-bold mb-4">
-                Simple pricing. No subscriptions.
-              </h2>
-              <p className="text-white/50">Pay once, keep your headshots forever.</p>
-            </div>
-            
-            <div className="grid md:grid-cols-3 gap-6" role="list">
+            <h2 className="text-2xl font-medium text-center mb-4">Pricing</h2>
+            <p className="text-center text-white/50 mb-16">
+              Pay once, keep forever
+            </p>
+
+            <div className="grid md:grid-cols-3 gap-6">
               {[
                 {
                   name: "Single",
                   price: "$5",
-                  description: "Try it out",
-                  features: ["1 professional headshot", "All style options", "High-res download"],
-                  popular: false,
+                  desc: "1 headshot",
+                  features: ["All styles", "High-res download", "Commercial use"],
                 },
                 {
-                  name: "Pro Pack",
+                  name: "Pack",
                   price: "$19",
-                  description: "Most popular",
-                  features: ["10 headshot variations", "All styles included", "High-res downloads", "Commercial license"],
+                  desc: "10 headshots",
+                  features: [
+                    "All styles",
+                    "High-res downloads",
+                    "Commercial use",
+                    "Priority processing",
+                  ],
                   popular: true,
                 },
                 {
                   name: "Team",
                   price: "$49",
-                  description: "For companies",
-                  features: ["5 team members", "Unlimited headshots each", "Consistent brand style", "Priority support"],
-                  popular: false,
+                  desc: "50 headshots",
+                  features: [
+                    "All styles",
+                    "High-res downloads",
+                    "Commercial use",
+                    "Priority processing",
+                    "Bulk upload",
+                  ],
                 },
-              ].map((plan, i) => (
-                <article 
-                  key={i} 
-                  className={`relative p-6 rounded-2xl border ${
-                    plan.popular 
-                      ? 'border-orange-500/50 bg-orange-500/5' 
-                      : 'border-white/5 bg-white/[0.02]'
+              ].map((plan) => (
+                <div
+                  key={plan.name}
+                  className={`p-6 rounded-xl border ${
+                    plan.popular
+                      ? "border-white/20 bg-white/[0.03]"
+                      : "border-white/[0.06]"
                   }`}
-                  aria-labelledby={`plan-${i}-name`}
                 >
-                  {plan.popular && (
-                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-orange-500 text-black text-xs font-bold px-3 py-1 rounded-full">
-                      Best Value
-                    </div>
-                  )}
-                  <header className="mb-4">
-                    <h3 id={`plan-${i}-name`} className="font-display text-lg font-semibold">{plan.name}</h3>
-                    <p className="text-sm text-white/40">{plan.description}</p>
-                  </header>
                   <div className="mb-6">
-                    <span className="font-display text-4xl font-bold">{plan.price}</span>
+                    <h3 className="font-medium mb-1">{plan.name}</h3>
+                    <p className="text-sm text-white/40">{plan.desc}</p>
                   </div>
-                  <ul className="space-y-2 mb-6" role="list">
-                    {plan.features.map((feature, j) => (
-                      <li key={j} className="flex items-center gap-2 text-sm text-white/60">
-                        <Check className="w-4 h-4 text-orange-400 flex-shrink-0" aria-hidden="true" />
+
+                  <div className="text-3xl font-medium mb-6">{plan.price}</div>
+
+                  <ul className="space-y-3 mb-8">
+                    {plan.features.map((feature) => (
+                      <li
+                        key={feature}
+                        className="text-sm text-white/50 flex items-center gap-2"
+                      >
+                        <span className="w-1 h-1 rounded-full bg-white/30" />
                         {feature}
                       </li>
                     ))}
                   </ul>
-                  <Link href="/app">
-                    <Button 
-                      className={`w-full rounded-full ${
-                        plan.popular 
-                          ? 'bg-orange-500 hover:bg-orange-400 text-black font-semibold' 
-                          : 'bg-white/5 hover:bg-white/10 border border-white/10'
+
+                  <Link href="/app" className="block">
+                    <button
+                      className={`w-full h-10 rounded-lg text-sm font-medium transition-colors ${
+                        plan.popular
+                          ? "bg-white text-black hover:bg-white/90"
+                          : "bg-white/[0.06] hover:bg-white/[0.1]"
                       }`}
                     >
-                      Get {plan.name}
-                    </Button>
+                      Get started
+                    </button>
                   </Link>
-                </article>
+                </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* FAQ - Objection Handling */}
-        <section id="faq" className="relative z-10 py-20 px-6 border-t border-white/5" aria-labelledby="faq-heading">
-          <div className="mx-auto max-w-2xl">
-            <div className="text-center mb-12">
-              <h2 id="faq-heading" className="font-display text-3xl font-bold mb-4">
-                Questions? Answered.
-              </h2>
-            </div>
-            
-            <div className="space-y-3" role="list">
+        {/* FAQ */}
+        <section className="py-32 px-6 border-t border-white/[0.06]">
+          <div className="mx-auto max-w-xl">
+            <h2 className="text-2xl font-medium text-center mb-16">
+              Questions
+            </h2>
+
+            <div className="space-y-1">
               {faqs.map((faq, i) => (
-                <div 
-                  key={i} 
-                  className="border border-white/5 rounded-xl overflow-hidden"
-                >
+                <div key={i} className="border-b border-white/[0.06]">
                   <button
                     onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                    className="w-full p-5 text-left flex items-center justify-between hover:bg-white/[0.02] transition-colors"
-                    aria-expanded={openFaq === i}
-                    aria-controls={`faq-answer-${i}`}
+                    className="w-full py-5 text-left flex items-center justify-between hover:text-white/80 transition-colors"
                   >
                     <span className="font-medium">{faq.q}</span>
-                    <ChevronDown 
-                      className={`w-5 h-5 text-white/40 transition-transform ${openFaq === i ? 'rotate-180' : ''}`} 
-                      aria-hidden="true"
+                    <ChevronDown
+                      className={`w-4 h-4 text-white/30 transition-transform ${
+                        openFaq === i ? "rotate-180" : ""
+                      }`}
                     />
                   </button>
-                  <div 
-                    id={`faq-answer-${i}`}
-                    className={`overflow-hidden transition-all duration-200 ${openFaq === i ? 'max-h-40' : 'max-h-0'}`}
-                    role="region"
-                    aria-labelledby={`faq-question-${i}`}
+                  <div
+                    className={`overflow-hidden transition-all duration-200 ${
+                      openFaq === i ? "max-h-32 pb-5" : "max-h-0"
+                    }`}
                   >
-                    <p className="px-5 pb-5 text-white/60 text-sm">
+                    <p className="text-white/50 text-sm leading-relaxed">
                       {faq.a}
                     </p>
                   </div>
@@ -384,51 +239,36 @@ export default function Home() {
         </section>
 
         {/* Final CTA */}
-        <section className="relative z-10 py-24 px-6" aria-labelledby="final-cta-heading">
-          <div className="mx-auto max-w-2xl text-center">
-            <h2 id="final-cta-heading" className="font-display text-3xl sm:text-4xl font-bold mb-4">
-              Your LinkedIn photo is the first impression.
-              <br />
-              <span className="text-orange-400">Make it count.</span>
-            </h2>
-            <p className="text-white/50 mb-8">
-              Join 12,000+ professionals who upgraded their image.
+        <section className="py-32 px-6 border-t border-white/[0.06]">
+          <div className="mx-auto max-w-xl text-center">
+            <h2 className="text-2xl font-medium mb-4">Ready to upgrade your image?</h2>
+            <p className="text-white/50 mb-10">
+              Join thousands of professionals who trust HeadshotAI.
             </p>
             <Link href="/app">
-              <Button size="lg" className="bg-orange-500 hover:bg-orange-400 text-black font-bold text-lg px-10 h-14 rounded-full gap-2 shadow-[0_0_30px_rgba(251,146,60,0.3)]">
-                Create Your Headshot Now
-                <ArrowRight className="w-5 h-5" aria-hidden="true" />
-              </Button>
+              <button className="h-12 px-8 text-base font-medium bg-white text-black rounded-lg hover:bg-white/90 transition-colors inline-flex items-center gap-2">
+                Create your headshot
+                <ArrowRight className="w-4 h-4" />
+              </button>
             </Link>
           </div>
         </section>
       </main>
 
       {/* Footer */}
-      <footer className="relative z-10 py-8 px-6 border-t border-white/5" role="contentinfo">
-        <div className="mx-auto max-w-6xl flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-white/30">
+      <footer className="py-8 px-6 border-t border-white/[0.06]">
+        <div className="mx-auto max-w-6xl flex items-center justify-between text-sm text-white/30">
           <span>© 2026 HeadshotAI</span>
-          <nav className="flex gap-6" aria-label="Footer navigation">
-            <Link href="/privacy" className="hover:text-white/50 transition-colors">Privacy</Link>
-            <Link href="/terms" className="hover:text-white/50 transition-colors">Terms</Link>
-          </nav>
+          <div className="flex gap-6">
+            <Link href="/privacy" className="hover:text-white/60 transition-colors">
+              Privacy
+            </Link>
+            <Link href="/terms" className="hover:text-white/60 transition-colors">
+              Terms
+            </Link>
+          </div>
         </div>
       </footer>
-
-      <style jsx global>{`
-        .font-display {
-          font-family: var(--font-display), system-ui, sans-serif;
-        }
-        
-        @keyframes fade-in {
-          from { opacity: 0; transform: translateY(10px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .animate-fade-in {
-          animation: fade-in 0.6s ease-out forwards;
-        }
-      `}</style>
     </div>
   );
 }
