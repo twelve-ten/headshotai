@@ -42,21 +42,12 @@ export const metadata: Metadata = {
     title: "HeadshotAI - Professional Headshots in 2 Minutes",
     description:
       "Turn any selfie into a studio-quality professional headshot. No photographer needed.",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "HeadshotAI - Professional AI Headshots",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "HeadshotAI - Professional Headshots in 2 Minutes",
     description:
       "Turn any selfie into a studio-quality professional headshot. No photographer needed.",
-    images: ["/og-image.png"],
     creator: "@headshotai",
   },
   alternates: {
