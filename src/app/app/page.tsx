@@ -23,7 +23,6 @@ export default function HeadshotApp() {
   
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Track app view on mount
   useEffect(() => {
     analytics.appView();
   }, []);
@@ -54,6 +53,15 @@ export default function HeadshotApp() {
     const file = e.dataTransfer.files[0];
     if (file) handleFile(file);
   }, [handleFile]);
+
+  const handleDragOver = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+  }, []);
+
+  const handleDragLeave = useCallback(() => {
+    setIsDragging(false);
+  }, []);
 
   const generate = async () => {
     if (!uploadedImage) return;
@@ -102,7 +110,7 @@ export default function HeadshotApp() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-[#08080a] text-white">
       {/* Header */}
       <header className="border-b border-white/5">
         <div className="mx-auto max-w-5xl px-6 py-4 flex items-center gap-4">
@@ -111,8 +119,8 @@ export default function HeadshotApp() {
             Back
           </Link>
           <div className="h-4 w-px bg-white/20" />
-          <h1 className="text-lg font-semibold">
-            Headshot<span className="text-orange-500">AI</span>
+          <h1 className="font-display text-lg font-semibold">
+            Headshot<span className="text-orange-400">AI</span>
           </h1>
         </div>
       </header>
@@ -120,22 +128,22 @@ export default function HeadshotApp() {
       <main className="mx-auto max-w-5xl px-6 py-10">
         {/* Step indicator */}
         <div className="flex items-center justify-center gap-4 mb-10">
-          <div className={`flex items-center gap-2 ${uploadedImage ? 'text-orange-500' : 'text-white'}`}>
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${uploadedImage ? 'bg-orange-500 text-black' : 'bg-white/10'}`}>
+          <div className={`flex items-center gap-2 ${uploadedImage ? 'text-orange-400' : 'text-white'}`}>
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${uploadedImage ? 'bg-orange-500 text-black' : 'bg-white/10 text-white/60'}`}>
               1
             </div>
             <span className="text-sm">Upload</span>
           </div>
           <div className="w-12 h-px bg-white/20" />
-          <div className={`flex items-center gap-2 ${generatedImage ? 'text-orange-500' : 'text-white/50'}`}>
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${generatedImage ? 'bg-orange-500 text-black' : 'bg-white/10'}`}>
+          <div className={`flex items-center gap-2 ${generatedImage ? 'text-orange-400' : 'text-white/40'}`}>
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${generatedImage ? 'bg-orange-500 text-black' : 'bg-white/10 text-white/60'}`}>
               2
             </div>
             <span className="text-sm">Generate</span>
           </div>
           <div className="w-12 h-px bg-white/20" />
-          <div className={`flex items-center gap-2 ${generatedImage ? 'text-orange-500' : 'text-white/50'}`}>
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${generatedImage ? 'bg-orange-500 text-black' : 'bg-white/10'}`}>
+          <div className={`flex items-center gap-2 ${generatedImage ? 'text-orange-400' : 'text-white/40'}`}>
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${generatedImage ? 'bg-orange-500 text-black' : 'bg-white/10 text-white/60'}`}>
               3
             </div>
             <span className="text-sm">Download</span>
@@ -143,7 +151,7 @@ export default function HeadshotApp() {
         </div>
 
         {error && (
-          <div className="mb-6 p-4 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-sm text-center">
+          <div className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-sm text-center">
             {error}
           </div>
         )}
@@ -151,12 +159,12 @@ export default function HeadshotApp() {
         <div className="grid lg:grid-cols-2 gap-8">
           {/* Upload Section */}
           <div>
-            <h2 className="text-lg font-semibold mb-4">Your Photo</h2>
+            <h2 className="text-lg font-semibold mb-4 text-white">Your Photo</h2>
             {!uploadedImage ? (
               <div
                 onDrop={handleDrop}
-                onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
-                onDragLeave={() => setIsDragging(false)}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
                 onClick={() => fileInputRef.current?.click()}
                 className={`aspect-square rounded-2xl border-2 border-dashed flex flex-col items-center justify-center cursor-pointer transition-all ${
                   isDragging ? 'border-orange-500 bg-orange-500/10' : 'border-white/20 hover:border-white/40 bg-white/[0.02]'
@@ -166,7 +174,7 @@ export default function HeadshotApp() {
                 <p className="text-white/60 text-center px-8">
                   Drop your selfie here
                   <br />
-                  <span className="text-orange-500">or click to browse</span>
+                  <span className="text-orange-400">or click to browse</span>
                 </p>
                 <p className="text-white/30 text-sm mt-4">JPG, PNG up to 10MB</p>
                 <input
@@ -179,24 +187,27 @@ export default function HeadshotApp() {
               </div>
             ) : (
               <div className="space-y-4">
-                <div className="aspect-square rounded-2xl overflow-hidden bg-white/5">
+                <div className="aspect-square rounded-2xl overflow-hidden bg-white/5 border border-white/10">
                   <img 
                     src={uploadedImage} 
                     alt="Uploaded" 
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <Button variant="outline" onClick={reset} className="w-full gap-2 border-white/20">
+                <button 
+                  onClick={reset} 
+                  className="w-full py-3 px-4 rounded-xl border border-white/20 bg-white/5 text-white/80 hover:bg-white/10 hover:text-white transition-all flex items-center justify-center gap-2 text-sm font-medium"
+                >
                   <RefreshCw className="w-4 h-4" />
                   Upload Different Photo
-                </Button>
+                </button>
               </div>
             )}
           </div>
 
           {/* Style Selection & Generation */}
           <div>
-            <h2 className="text-lg font-semibold mb-4">Choose Style</h2>
+            <h2 className="text-lg font-semibold mb-4 text-white">Choose Style</h2>
             <div className="grid grid-cols-2 gap-3 mb-6">
               {styles.map((style) => (
                 <button
@@ -208,17 +219,17 @@ export default function HeadshotApp() {
                       : 'border-white/10 bg-white/[0.02] hover:border-white/20'
                   }`}
                 >
-                  <div className="font-medium mb-1">{style.name}</div>
+                  <div className="font-medium mb-1 text-white">{style.name}</div>
                   <div className="text-xs text-white/50">{style.description}</div>
                 </button>
               ))}
             </div>
 
             {!generatedImage ? (
-              <Button 
+              <button 
                 onClick={generate} 
                 disabled={!uploadedImage || isGenerating}
-                className="w-full bg-orange-500 hover:bg-orange-600 text-black font-semibold h-12 gap-2"
+                className="w-full h-12 rounded-xl bg-orange-500 hover:bg-orange-400 disabled:bg-orange-500/50 disabled:cursor-not-allowed text-black font-semibold flex items-center justify-center gap-2 transition-all"
               >
                 {isGenerating ? (
                   <>
@@ -231,10 +242,10 @@ export default function HeadshotApp() {
                     Generate Headshot
                   </>
                 )}
-              </Button>
+              </button>
             ) : (
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold">Your Professional Headshot</h3>
+                <h3 className="text-lg font-semibold text-white">Your Professional Headshot</h3>
                 <div className="aspect-square rounded-2xl overflow-hidden bg-white/5 border border-orange-500/30">
                   <img 
                     src={generatedImage} 
@@ -243,19 +254,24 @@ export default function HeadshotApp() {
                   />
                 </div>
                 <div className="flex gap-3">
-                  <Button onClick={download} className="flex-1 bg-orange-500 hover:bg-orange-600 text-black font-semibold gap-2">
+                  <button 
+                    onClick={download} 
+                    className="flex-1 py-3 rounded-xl bg-orange-500 hover:bg-orange-400 text-black font-semibold flex items-center justify-center gap-2 transition-all"
+                  >
                     <Download className="w-4 h-4" />
                     Download HD
-                  </Button>
-                  <Button onClick={generate} variant="outline" className="flex-1 border-white/20 gap-2">
+                  </button>
+                  <button 
+                    onClick={generate} 
+                    className="flex-1 py-3 rounded-xl border border-white/20 bg-white/5 text-white hover:bg-white/10 font-medium flex items-center justify-center gap-2 transition-all"
+                  >
                     <RefreshCw className="w-4 h-4" />
                     Regenerate
-                  </Button>
+                  </button>
                 </div>
               </div>
             )}
 
-            {/* Pricing reminder */}
             {uploadedImage && !generatedImage && (
               <p className="text-center text-white/40 text-sm mt-4">
                 First generation free • Then $5 per headshot
@@ -264,6 +280,12 @@ export default function HeadshotApp() {
           </div>
         </div>
       </main>
+
+      <style jsx global>{`
+        .font-display {
+          font-family: var(--font-display), system-ui, sans-serif;
+        }
+      `}</style>
     </div>
   );
 }

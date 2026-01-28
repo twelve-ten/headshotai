@@ -19,16 +19,17 @@ export async function POST(request: NextRequest) {
       : image;
 
     const stylePrompts: Record<string, string> = {
-      corporate: "Transform this photo into a professional corporate headshot. Clean neutral background (light gray or soft blue gradient), professional studio lighting, sharp focus on face, business-appropriate appearance. Make it look like it was taken by a professional photographer for a Fortune 500 company website.",
-      creative: "Transform this photo into a creative professional headshot. Subtle artistic background with soft colors, creative but professional lighting, approachable and modern feel. Perfect for tech startups, creative agencies, or personal branding.",
-      linkedin: "Transform this photo into the perfect LinkedIn profile photo. Clean professional background, friendly and approachable expression, well-lit face, business casual feel. Optimized to look great as a circular profile picture.",
-      executive: "Transform this photo into an executive headshot. Premium studio quality, sophisticated dark or gradient background, powerful confident presence, luxury magazine style lighting. Suitable for C-suite profiles and board presentations.",
+      corporate: "Transform this photo into a high-quality professional corporate headshot. Requirements: Clean neutral gray or soft blue gradient background, professional studio lighting with soft shadows, sharp focus on the face, business-appropriate appearance. The result should look like it was taken by a professional photographer for a Fortune 500 company executive page. Maintain the person's likeness exactly.",
+      creative: "Transform this photo into a creative professional headshot suitable for tech startups and creative agencies. Requirements: Subtle artistic background with modern colors, creative but professional lighting, approachable and innovative feel. Keep the person's face and features exactly the same while enhancing the overall professional quality.",
+      linkedin: "Transform this photo into the perfect LinkedIn profile photo. Requirements: Clean professional background, friendly and approachable expression enhanced through lighting, well-lit face with soft professional lighting, business casual feel. The photo should look great as a circular profile picture and convey trustworthiness and competence. Maintain exact likeness.",
+      executive: "Transform this photo into a premium executive headshot suitable for C-suite profiles and board presentations. Requirements: Sophisticated dark or elegant gradient background, powerful and confident presence through professional studio lighting, luxury magazine quality. The result should convey authority and success while maintaining the person's exact appearance.",
     };
 
     const prompt = stylePrompts[style] || stylePrompts.corporate;
 
+    // Use Gemini 3 Pro Image for best quality
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp-image-generation:generateContent?key=${apiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-image-preview:generateContent?key=${apiKey}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -67,6 +68,7 @@ export async function POST(request: NextRequest) {
     )?.inlineData?.data;
 
     if (!generatedImage) {
+      console.error("No image in response:", JSON.stringify(data, null, 2));
       return NextResponse.json({ error: "No image generated" }, { status: 500 });
     }
 
