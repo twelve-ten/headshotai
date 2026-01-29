@@ -41,6 +41,14 @@ export const metadata: Metadata = {
     title: "HeadshotAI - Professional Headshots",
     description:
       "Transform any selfie into a professional headshot in under 2 minutes.",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "HeadshotAI - Professional Headshots",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
@@ -48,6 +56,7 @@ export const metadata: Metadata = {
     description:
       "Transform any selfie into a professional headshot in under 2 minutes.",
     creator: "@headshotai",
+    images: ["/og-image.png"],
   },
   alternates: {
     canonical: "https://headshotai.com",
